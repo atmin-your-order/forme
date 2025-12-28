@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Birthdays - Ikyy & Bibil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            animation: float 8s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5em;
+            font-weight: 300;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.3em;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .countdown-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .countdown-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .countdown-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .countdown-card.ikyy {
+            border-top: 5px solid #4facfe;
+        }
+
+        .countdown-card.bibil {
+            border-top: 5px solid #f093fb;
+        }
+
+        .person-name {
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .ikyy .person-name {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bibil .person-name {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .birth-date {
+            text-align: center;
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .timer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .timer-box {
+            text-align: center;
+            padding: 20px 10px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .timer-number {
+            font-size: 3em;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .ikyy .timer-number {
+            color: #4facfe;
+        }
+
+        .bibil .timer-number {
+            color: #f093fb;
+        }
+
+        .timer-label {
+            font-size: 0.9em;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .message-box {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+
+        .message-en {
+            font-size: 1.3em;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 15px;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .message-id {
+            font-size: 1.1em;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .birthday-today {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        .birthday-today h2 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .countdown-wrapper {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .timer {
+                gap: 10px;
+            }
+
+            .timer-number {
+                font-size: 2em;
+            }
+
+            .countdown-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Our Special Days</h1>
+            <p>Counting down to the most beautiful moments</p>
+        </div>
+
+        <div class="countdown-wrapper">
+            <!-- Ikyy's Birthday -->
+            <div class="countdown-card ikyy">
+                <div class="person-name">IKYY</div>
+                <div class="birth-date">May 28th</div>
+                <div id="ikyyBirthday"></div>
+                <div class="message-box" id="ikyyMessage">
+                    <div class="message-en"></div>
+                    <div class="message-id"></div>
+                </div>
+            </div>
+
+            <!-- Bibil's Birthday -->
+            <div class="countdown-card bibil">
+                <div class="person-name">BIBIL</div>
+                <div class="birth-date">March 16th</div>
+                <div id="bibilBirthday"></div>
+                <div class="message-box" id="bibilMessage">
+                    <div class="message-en"></div>
+                    <div class="message-id"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sweet messages array (50+ quotes)
+        const sweetMessages = [
+            { en: "May your dreams come true and your heart be filled with joy", id: "Semoga impianmu menjadi kenyataan dan hatimu dipenuhi kebahagiaan" },
+            { en: "You deserve all the love and happiness in the world", id: "Kamu pantas mendapat semua cinta dan kebahagiaan di dunia" },
+            { en: "Every moment with you is a treasure I hold dear", id: "Setiap momen bersamamu adalah harta yang kusayangi" },
+            { en: "You light up my world in ways I never imagined", id: "Kamu menerangi duniaku dengan cara yang tak pernah kubayangkan" },
+            { en: "May your birthday be as beautiful as your soul", id: "Semoga ulang tahunmu seindah jiwamu" },
+            { en: "Your smile is the sunshine that brightens my darkest days", id: "Senyummu adalah sinar matahari yang mencerahkan hari-hariku yang tergelap" },
+            { en: "I'm grateful for every second I get to spend with you", id: "Aku bersyukur untuk setiap detik yang kuhabiskan bersamamu" },
+            { en: "You make ordinary moments feel extraordinary", id: "Kamu membuat momen biasa terasa luar biasa" },
+            { en: "May this year bring you endless blessings and opportunities", id: "Semoga tahun ini membawamu berkah dan peluang tanpa batas" },
+            { en: "Your presence in my life is the greatest gift", id: "Kehadiranmu dalam hidupku adalah hadiah terbesar" },
+            { en: "I hope your special day is filled with laughter and love", id: "Kuharap hari istimewamu dipenuhi tawa dan cinta" },
+            { en: "You are more precious to me than words can express", id: "Kamu lebih berharga bagiku dari yang bisa diungkapkan kata-kata" },
+            { en: "May you always find reasons to smile and be happy", id: "Semoga kamu selalu menemukan alasan untuk tersenyum dan bahagia" },
+            { en: "Your happiness means everything to me", id: "Kebahagiaanmu berarti segalanya bagiku" },
+            { en: "I wish you a year full of love, laughter, and success", id: "Aku mendoakanmu tahun yang penuh cinta, tawa, dan kesuksesan" },
+            { en: "You deserve to be celebrated every single day", id: "Kamu pantas dirayakan setiap hari" },
+            { en: "May your heart always be filled with hope and joy", id: "Semoga hatimu selalu dipenuhi harapan dan kegembiraan" },
+            { en: "You are the reason I believe in beautiful things", id: "Kamu adalah alasan aku percaya pada hal-hal indah" },
+            { en: "I hope this year brings you closer to your dreams", id: "Kuharap tahun ini membawamu lebih dekat dengan mimpi-mimpimu" },
+            { en: "Your kindness and warmth touch everyone around you", id: "Kebaikan dan kehangatanmu menyentuh semua orang di sekitarmu" },
+            { en: "May you continue to shine bright like the star you are", id: "Semoga kamu terus bersinar terang seperti bintang yang kamu adakan" },
+            { en: "Every day with you feels like a celebration", id: "Setiap hari bersamamu terasa seperti perayaan" },
+            { en: "You bring so much color into my black and white world", id: "Kamu membawa begitu banyak warna ke dunia hitam putihku" },
+            { en: "I'm blessed to have you in my life", id: "Aku diberkati memilikimu dalam hidupku" },
+            { en: "May all your wishes and desires come true", id: "Semoga semua harapan dan keinginanmu menjadi kenyataan" },
+            { en: "You make me want to be a better person every day", id: "Kamu membuatku ingin menjadi orang yang lebih baik setiap hari" },
+            { en: "Your birthday is a reminder of how lucky I am", id: "Ulang tahunmu adalah pengingat betapa beruntungnya aku" },
+            { en: "I hope your day is as wonderful as you are", id: "Kuharap harimu seindah dirimu" },
+            { en: "May you always be surrounded by love and positivity", id: "Semoga kamu selalu dikelilingi cinta dan energi positif" },
+            { en: "You deserve nothing but the best in life", id: "Kamu tidak pantas mendapat apa pun selain yang terbaik dalam hidup" },
+            { en: "Your laughter is my favorite sound in the world", id: "Tawamu adalah suara favoritku di dunia" },
+            { en: "I wish you strength, courage, and endless happiness", id: "Aku mendoakanmu kekuatan, keberanian, dan kebahagiaan tanpa batas" },
+            { en: "You are loved more than you'll ever know", id: "Kamu dicintai lebih dari yang pernah kamu ketahui" },
+            { en: "May this birthday mark the beginning of your best year yet", id: "Semoga ulang tahun ini menandai awal tahun terbaikmu" },
+            { en: "You have a beautiful soul that deserves to be cherished", id: "Kamu memiliki jiwa yang indah yang pantas dihargai" },
+            { en: "I hope your birthday is filled with magical moments", id: "Kuharap ulang tahunmu dipenuhi momen-momen ajaib" },
+            { en: "Your existence makes the world a better place", id: "Keberadaanmu membuat dunia menjadi tempat yang lebih baik" },
+            { en: "May you always stay true to yourself and your dreams", id: "Semoga kamu selalu setia pada dirimu sendiri dan mimpi-mimpimu" },
+            { en: "You inspire me to be the best version of myself", id: "Kamu menginspirasi aku untuk menjadi versi terbaik dari diriku" },
+            { en: "I'm counting down the days until I can celebrate you", id: "Aku menghitung hari sampai aku bisa merayakanmu" },
+            { en: "Your birthday reminds me how grateful I am for you", id: "Ulang tahunmu mengingatkanku betapa bersyukurnya aku memilikimu" },
+            { en: "May your path always be filled with light and love", id: "Semoga jalanmu selalu dipenuhi cahaya dan cinta" },
+            { en: "You deserve to be spoiled and pampered on your special day", id: "Kamu pantas dimanja pada hari istimewamu" },
+            { en: "I hope this year brings you peace and contentment", id: "Kuharap tahun ini membawamu kedamaian dan kepuasan" },
+            { en: "Your happiness is my priority, today and always", id: "Kebahagiaanmu adalah prioritasku, hari ini dan selamanya" },
+            { en: "May you be blessed with good health and prosperity", id: "Semoga kamu diberkati dengan kesehatan dan kemakmuran" },
+            { en: "You are my favorite person and my greatest blessing", id: "Kamu adalah orang favoritku dan berkah terbesarku" },
+            { en: "I wish you adventures, memories, and endless joy", id: "Aku mendoakanmu petualangan, kenangan, dan kegembiraan tanpa akhir" },
+            { en: "Your special day deserves to be celebrated grandly", id: "Hari istimewamu pantas dirayakan dengan meriah" },
+            { en: "May you find beauty in every moment of your life", id: "Semoga kamu menemukan keindahan di setiap momen hidupmu" },
+            { en: "You are the best thing that ever happened to me", id: "Kamu adalah hal terbaik yang pernah terjadi padaku" },
+            { en: "I hope your birthday is just the beginning of a wonderful journey", id: "Kuharap ulang tahunmu hanyalah awal dari perjalanan yang indah" },
+            { en: "Your presence makes everything better and brighter", id: "Kehadiranmu membuat segalanya lebih baik dan lebih cerah" },
+            { en: "May you always be protected and guided by love", id: "Semoga kamu selalu dilindungi dan dibimbing oleh cinta" },
+            { en: "You are worthy of all the good things coming your way", id: "Kamu layak mendapat semua hal baik yang datang padamu" },
+            { en: "I'm excited to celebrate another year of your amazing life", id: "Aku bersemangat untuk merayakan tahun lain dari hidupmu yang luar biasa" },
+            { en: "May your birthday be as sweet and lovely as you are", id: "Semoga ulang tahunmu semanis dan seindah dirimu" },
+            { en: "You fill my heart with happiness I never knew existed", id: "Kamu mengisi hatiku dengan kebahagiaan yang tak pernah kuketahui ada" },
+            { en: "I hope you know how incredibly special you are to me", id: "Kuharap kamu tahu betapa luar biasa istimewanya kamu bagiku" },
+            { en: "May this year be your best one yet, filled with love", id: "Semoga tahun ini menjadi yang terbaik, penuh dengan cinta" }
+        ];
+
+        // Create floating hearts
+        function createHearts() {
+            const container = document.getElementById('floatingHearts');
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (5 + Math.random() * 3) + 's';
+                heart.style.fontSize = (15 + Math.random() * 15) + 'px';
+                container.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 8000);
+            }, 1000);
+        }
+
+        // Countdown function
+        function updateCountdown(targetDate, elementId) {
+            const now = new Date().getTime();
+            const target = new Date(targetDate).getTime();
+            const distance = target - now;
+
+            if (distance < 0) {
+                // Birthday is today or passed, show next year
+                const nextYear = new Date(targetDate);
+                nextYear.setFullYear(nextYear.getFullYear() + 1);
+                return updateCountdown(nextYear.toISOString().split('T')[0], elementId);
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Check if it's birthday today
+            const today = new Date();
+            const birthdayDate = new Date(targetDate);
+            const isBirthdayToday = today.getDate() === birthdayDate.getDate() && 
+                                   today.getMonth() === birthdayDate.getMonth();
+
+            if (isBirthdayToday && days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+                document.getElementById(elementId).innerHTML = `
+                    <div class="birthday-today">
+                        <h2>🎉 HAPPY BIRTHDAY! 🎉</h2>
+                        <p>Today is your special day!</p>
+                    </div>
+                `;
+            } else {
+                document.getElementById(elementId).innerHTML = `
+                    <div class="timer">
+                        <div class="timer-box">
+                            <span class="timer-number">${days}</span>
+                            <span class="timer-label">Days</span>
+                        </div>
+                        <div class="timer-box">
+                            <span class="timer-number">${hours}</span>
+                            <span class="timer-label">Hours</span>
+                        </div>
+                        <div class="timer-box">
+                            <span class="timer-number">${minutes}</span>
+                            <span class="timer-label">Minutes</span>
+                        </div>
+                        <div class="timer-box">
+                            <span class="timer-number">${seconds}</span>
+                            <span class="timer-label">Seconds</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Get next birthday date
+        function getNextBirthday(month, day) {
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let birthday = new Date(currentYear, month - 1, day);
+            
+            if (birthday < now) {
+                birthday = new Date(currentYear + 1, month - 1, day);
+            }
+            
+            return birthday.toISOString().split('T')[0];
+        }
+
+        // Random message function
+        function updateRandomMessage(elementId) {
+            const randomIndex = Math.floor(Math.random() * sweetMessages.length);
+            const message = sweetMessages[randomIndex];
+            
+            const messageBox = document.getElementById(elementId);
+            messageBox.style.opacity = '0';
+            
+            setTimeout(() => {
+                messageBox.querySelector('.message-en').textContent = `"${message.en}"`;
+                messageBox.querySelector('.message-id').textContent = message.id;
+                messageBox.style.opacity = '1';
+            }, 300);
+        }
+
+        // Initialize
+        createHearts();
+
+        const ikyyBirthday = getNextBirthday(5, 28); // May 28
+        const bibilBirthday = getNextBirthday(3, 16); // March 16
+
+        // Update countdowns every second
+        setInterval(() => {
+            updateCountdown(ikyyBirthday, 'ikyyBirthday');
+            updateCountdown(bibilBirthday, 'bibilBirthday');
+        }, 1000);
+
+        // Initial countdown
+        updateCountdown(ikyyBirthday, 'ikyyBirthday');
+        updateCountdown(bibilBirthday, 'bibilBirthday');
+
+        // Update messages every 5 seconds
+        updateRandomMessage('ikyyMessage');
+        updateRandomMessage('bibilMessage');
+        
+        setInterval(() => {
+            updateRandomMessage('ikyyMessage');
+            updateRandomMessage('bibilMessage');
+        }, 5000);
+    </script>
+</body>
+</html>
